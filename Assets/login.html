@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-image: url("./login\ bg.jpg");
+            background-size: cover;
+        }
+    </style>
+</head>
+
+<body bgcolor="white">
+    <h1 style="color: white;">Register</h1>
+    <form class="login-container" action="/submit" method="post" onsubmit="return validateForm(this.username.value, this.email.value, this.password.value);">
+        <label for="username">Username:</label><br><br>
+        <input type="text" id="username" name="username" autocomplete="given-name"><br><br>
+        <label for="email">Email:</label><br><br>
+        <input type="email" id="email" name="email" autocomplete="given-name"></label><br><br>
+        <label for="password">Password:</label><br><br>
+        <input type="password" id="password" name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Password must contain at least one digit one uppercase letter, one lowercase letter, and be at least 8 characters long"><br><br>
+        <button type="submit" class="mybutton" autocomplete="given-name"><b>Sign-In</b></button><br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Already have an account?<a href="/Assets/Register.html">Login</a>
+        <div id="error-message" class="error" style="display:none;">None of the fields should not be Empty!!</div>
+    </form>
+</body>
+
+</html>

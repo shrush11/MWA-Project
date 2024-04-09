@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Search Bar</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        
+        .search-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        
+        .search {
+            display: inline-block;
+            background-color: #010048;
+            border-radius: 40px;
+            padding: 10px;
+        }
+        
+        .search:hover>.searchInput {
+            width: 240px;
+            padding: 0 6px;
+        }
+        
+        .search:hover>.searchButton {
+            background: #ccc;
+            color: #23272A;
+        }
+        
+        @media screen and (max-width: 620px) {
+            .search:hover>.searchInput {
+                width: 150px;
+                padding: 0 6px;
+            }
+        }
+        
+        .searchInput {
+            border: none;
+            background: none;
+            outline: none;
+            float: left;
+            padding: 0;
+            color: #ccc;
+            font-size: 16px;
+            transition: 0.4s;
+            line-height: 40px;
+            width: 0px;
+        }
+        
+        .searchButton {
+            border: none;
+            background: none;
+            outline: none;
+            cursor: pointer;
+            color: #ccc;
+            font-size: 16px;
+            line-height: 40px;
+            transition: 0.4s;
+        }
+        
+        .searchButton:hover {
+            background: #ccc;
+            color: #23272A;
+        }
+        
+        #gamelist {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+        
+        #gamelist li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="search-container">
+        <div class="search">
+            <input class="searchInput" id="searchInput" type="text" placeholder="Search">
+            <button class="searchButton" onclick="filter(document.getElementById('searchInput').value)">
+                <i class="material-icons"></i>Search
+            </button>
+        </div>
+        <ul id="gamelist"></ul>
+    </div>
+
+    <script>
+        const games = [{
+            name: "Horizon Forbidden",
+            platform: "Level I"
+        }, {
+            name: "EA Sports FIFA",
+            platform: "Level II"
+        }, {
+            name: "Avatar Frontiers",
+            platform: "Level III"
+        }, {
+            name: "Forza Horizon",
+            platform: "Level IV"
+        }];
+
+        function display(gameslist) {
+            const gameselement = document.getElementById("gamelist");
+            gameselement.innerHTML = "";
+            gameslist.forEach(game => {
+                const listItem = document.createElement("li");
+                listItem.textContent = `${game.name} - ${game.platform}`;
+                gameselement.appendChild(listItem);
+            });
+        }
+
+        function filter(searchQuery) {
+            const filteredGames = games.filter(game => {
+                return game.name.toLowerCase().includes(searchQuery.toLowerCase());
+            });
+            display(filteredGames);
+        }
+    </script>
+</body>
+
+</html>

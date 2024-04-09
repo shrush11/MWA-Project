@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="cartApp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart Page</title>
+    <style>
+        /* CSS styles */
+    
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9; /* Light grey background */
+            color: #333; /* Dark grey text */
+            margin: 0;
+            padding: 0;
+        }
+    
+        .container {
+            width: 95%;
+            margin: 20px auto;
+            display: flex;
+            justify-content: space-between;
+        }
+    
+        .cart-section {
+            width: 65%;
+            padding: 20px;
+            background-color: #fff; /* White background */
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Shadow effect */
+        }
+    
+        .final-bill {
+            width: 30%;
+            padding: 20px;
+            background-color: #fff; /* White background */
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Shadow effect */
+        }
+    
+        h1 {
+            color: #010048; /* Changed to the new shade of blue */
+            margin-bottom: 20px;
+        }
+    
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+    
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee; /* Light grey border */
+        }
+    
+        th {
+            background-color: #010048; /* Changed to the new shade of blue */
+            color: white;
+        }
+    
+        tbody tr:nth-child(even) {
+            background-color: #f2f2f2; /* Light grey alternate row */
+        }
+    
+        input[type="number"] {
+            width: 50px;
+        }
+    
+        button {
+            background-color: #010048; /* Changed to the new shade of blue */
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    
+        button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+            transition: background-color 0.3s ease;
+
+        }
+    
+        .product-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px; /* Added vertical spacing */
+        }
+    
+        .product-item img {
+            margin-right: 10px;
+            max-width: 50px;
+            max-height: 50px;
+            border-radius: 4px;
+        }
+    
+        .cartt{
+            margin-left: 100px;
+        }
+        .aaa{
+            margin-left: 40px;
+        
+        }
+
+        .checkout-btn{
+            margin-left: 260px;
+        }
+
+        .clear-btn{
+            position: fixed;
+            margin-left: 0px;
+        }
+    
+    </style>
+
+    
+
+    
+    
+</head>
+
+<body ng-controller="cartController">
+
+    <br><br><br>
+    <!--  navbar  -->
+
+    <div class="container">
+        <div class="cart-section">
+
+            
+
+            <div class="aaa">
+                <h2>Available Games</h2>
+            </div>
+
+            <div>
+        
+                <ul class="product-list">
+                    <li ng-repeat="product in availableProducts" class="product-item">
+                        <img ng-src="{{ product.image }}" alt="{{ product.name }}">
+                        <span>{{ product.name }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${{ product.price }}</span>
+                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="number" ng-model="product.quantity" min="1">
+                        <button class="cartt" ng-click="addToCart(product)">Add to Cart</button>
+                    </li>
+                </ul>
+            
+            </div>
+
+            <H1>Product Cart</H1>
+
+            <div ng-if="cartItems.length === 0">
+                <p>Your cart is empty.</p>
+            </div>
+
+            <div ng-if="cartItems.length > 0">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in cartItems">
+                            <td class="product-item">
+                                <img ng-src="{{ item.image }}" alt="{{ item.name }}">
+                                <span>{{ item.name }}</span>
+                            </td>
+                            <td>${{ item.price }}</td>
+                            <td><input type="number" ng-model="item.quantity" min="1"></td>
+                            <td>${{ item.price * item.quantity }}</td>
+                            <td>
+                                <button ng-click="removeFromCart(item)">Remove</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p><strong>Total: ${{ getTotalPrice() }}</strong></p>
+            </div>
+        </div>
+
+        <div class="final-bill">
+            <h2>Final Bill</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                    </tr>
+                    
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in cartItems">
+                        <td class="product-item">
+                            <img ng-src="{{ item.image }}" alt="{{ item.name }}">
+                            <span>{{ item.name }}</span>
+                        </td>
+                        <td>{{ item.quantity }}</td>
+                        <td>${{ item.price * item.quantity }}</td>
+                    </tr>
+
+
+                </tbody>
+            </table>
+
+            <button class="clear-btn" ng-click="clearCart()">Clear Cart</button>
+
+            <button class="checkout-btn"> Proceed to Checkout </button>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+        // AngularJS code
+        var app = angular.module('cartApp', []);
+
+        app.controller('cartController', function ($scope) {
+            $scope.cartItems = [];
+            $scope.availableProducts = [
+                { id: 1, name: 'Game 1', price: 50, quantity: 1, image: '1.webp' },
+                { id: 2, name: 'Game 2', price: 40, quantity: 1, image: 'h.png' },
+                { id: 3, name: 'Game 3', price: 60, quantity: 1, image: '6.png' },
+                { id: 4, name: 'Game 4', price: 80, quantity: 1, image: '7.webp' }
+            ];
+
+            $scope.addToCart = function (product) {
+                var existingItem = $scope.cartItems.find(item => item.id === product.id);
+                if (existingItem) {
+                    existingItem.quantity += product.quantity;
+                } else {
+                    $scope.cartItems.push({
+                        id: product.id,
+                        name: product.name,
+                        price: product.price,
+                        quantity: product.quantity,
+                        image: product.image
+                    });
+                }
+            };
+
+            $scope.removeFromCart = function (item) {
+                var index = $scope.cartItems.indexOf(item);
+                if (index !== -1) {
+                    $scope.cartItems.splice(index, 1);
+                }
+            };
+
+            $scope.getTotalPrice = function () {
+                var totalPrice = 0;
+                for (var i = 0; i < $scope.cartItems.length; i++) {
+                    totalPrice += $scope.cartItems[i].price * $scope.cartItems[i].quantity;
+                }
+                return totalPrice;
+            };
+
+            $scope.clearCart = function () {
+                $scope.cartItems = []; // Empty the cartItems array
+            };
+        });
+
+        
+    </script>
+</body>
+
+</html>
+
